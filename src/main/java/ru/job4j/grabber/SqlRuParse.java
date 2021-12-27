@@ -8,7 +8,6 @@ import ru.job4j.utils.SqlRuDateTimeParser;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class SqlRuParse implements Parse {
 
@@ -26,7 +25,8 @@ public class SqlRuParse implements Parse {
             Elements row = doc.select(".postslisttopic");
             for (Element td : row) {
                 Element child = td.parent().child(1);
-                if (child.text().toLowerCase().contains("java")) {
+                if (child.text().toLowerCase().contains("java")
+                        && !child.text().toLowerCase().contains("javascript")) {
                     result.add(detail(child.getAllElements().attr("href")));
                 }
             }
