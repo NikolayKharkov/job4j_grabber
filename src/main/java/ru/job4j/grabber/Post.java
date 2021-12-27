@@ -18,6 +18,15 @@ public class Post {
         this.localDateTime = localDateTime;
     }
 
+    public Post(int id, String title, String link,
+                String description, LocalDateTime localDateTime) {
+        this.id = id;
+        this.title = title;
+        this.link = link;
+        this.description = description;
+        this.localDateTime = localDateTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -76,5 +85,15 @@ public class Post {
 
     public LocalDateTime getLocalDateTime() {
         return localDateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{"
+                + "title='" + title + '\''
+                + ", link='" + link + '\''
+                + ", description='" + description + '\''
+                + ", localDateTime=" + localDateTime
+                + '}';
     }
 }
