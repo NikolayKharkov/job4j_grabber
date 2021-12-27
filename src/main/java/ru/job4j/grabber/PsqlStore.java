@@ -23,23 +23,18 @@ public class PsqlStore implements Store, AutoCloseable {
 
     @Override
     public void save(Post post) {
-        try (PreparedStatement preStatement =
+        try (PreparedStatement statement =
                      cnn.prepareStatement(
-                             "select * from posts where link = ?")) {
-            preStatement.setString(1, post.getLink());
-            preStatement.execute();
-            try (ResultSet checkUnique = preStatement.executeQuery()) {
-                if (!checkUnique.isBeforeFirst()) {
-                    try (PreparedStatement statement =
-                                 cnn.prepareStatement(
-                                         "insert into posts(name, text, link, created)"
-                                                 + " values (?, ?, ?, ?)")) {
-                        statement.setString(1, post.getTitle());
-                        statement.setString(2, post.getDescription());
-                        statement.setString(3, post.getLink());
-                        statement.setTimestamp(4, Timestamp.valueOf(post.getLocalDateTime()));
-                        statement.execute();
-                    }
+                             "insert into posts(name, text, link, created) values (?, ?, ?, ?)",
+                             Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, post.getTitle());
+            statement.setString(2, post.getDescription());
+            statement.setString(3, post.getLink());
+            statement.setTimestamp(4, Timestamp.valueOf(post.getLocalDateTime()));
+            statement.execute();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    post.setId(generatedKeys.getInt(1));
                 }
             }
         } catch (Exception e) {
