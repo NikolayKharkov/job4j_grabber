@@ -54,14 +54,14 @@ public class Post {
             return false;
         }
         Post post = (Post) o;
-        return Objects.equals(title, post.title)
+        return id == post.id
+                && Objects.equals(title, post.title)
                 && Objects.equals(href, post.href)
-                && Objects.equals(description, post.description)
                 && Objects.equals(createDate, post.createDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, href, description, createDate);
+        return Objects.hash(id, title, href, createDate);
     }
 }
