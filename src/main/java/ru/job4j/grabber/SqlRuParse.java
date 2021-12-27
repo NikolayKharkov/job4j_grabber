@@ -8,6 +8,7 @@ import ru.job4j.utils.SqlRuDateTimeParser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class SqlRuParse implements Parse {
 
@@ -20,11 +21,15 @@ public class SqlRuParse implements Parse {
     @Override
     public List<Post> list(String link) throws Exception {
         List<Post> result = new ArrayList<>();
-        Document doc = Jsoup.connect(link).get();
-        Elements row = doc.select(".postslisttopic");
-        for (Element td : row) {
-            Element parent = td.parent();
-            result.add(detail(parent.child(1).getAllElements().attr("href")));
+        for (int i = 1; i != 6; i++) {
+            Document doc = Jsoup.connect(link + "/" + i).get();
+            Elements row = doc.select(".postslisttopic");
+            for (Element td : row) {
+                Element child = td.parent().child(1);
+                if (child.text().toLowerCase().contains("java")) {
+                    result.add(detail(child.getAllElements().attr("href")));
+                }
+            }
         }
         return result;
     }
