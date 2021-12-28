@@ -49,8 +49,7 @@ join company c on c.id = p.company_id
 group by c.name
 having count(p.id) in (select max(cnt) from (select count(p.id) as cnt
                                              from person p
-                                             join company c on c.id = p.company_id
-                                             group by c.id) as count_empl);
+                                             group by p.company_id) as count_empl);
 
 
 
